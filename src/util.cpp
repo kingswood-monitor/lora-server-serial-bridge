@@ -1,28 +1,30 @@
 #include <Arduino.h>
+
+#include "config.h"
 #include "util.h"
 
-// Singleton instance of the radio driver
+void display_logo(const char *title, const char *version);
 
 bool init_device()
 {
     Serial.begin(115200);
-    Serial1.begin(9600);
     delay(5000);
 
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, HIGH);
+    display_logo(FIRMWARE_NAME, FIRMWARE_VERSION);
 
-    Serial.println("** LoRa Server");
+    return true;
 }
 
-void init_radio()
+void display_logo(const char *title, const char *version)
 {
-    digitalWrite(RFM95_RST, HIGH);
-    Serial.print("Radio...");
+    char strap_line[200];
+    sprintf(strap_line, "                  |___/  %s v%s", title, version);
 
-    // manual reset
-    digitalWrite(RFM95_RST, LOW);
-    delay(10);
-    digitalWrite(RFM95_RST, HIGH);
-    delay(10);
+    Serial.println("  _  __ _                                                _ ");
+    Serial.println(" | |/ /(_) _ __    __ _  ___ __      __ ___    ___    __| |");
+    Serial.println(" | ' / | || '_ \\  / _` |/ __|\\ \\ /\\ / // _ \\  / _ \\  / _` |");
+    Serial.println(" | . \\ | || | | || (_| |\\__ \\ \\ V  V /| (_) || (_) || (_| |");
+    Serial.println(" |_|\\_\\|_||_| |_| \\__, ||___/  \\_/\\_/  \\___/  \\___/  \\__,_|");
+    Serial.println(strap_line);
+    Serial.println();
 }
